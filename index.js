@@ -29,6 +29,67 @@ app.put("/api/credential", (req, res) => {
   }
 });
 
+function auth(req, res, next) {
+  // first we will verify if the key exists
+  var found = credentials.findOne({ key: req.headers["x-key"] });
+  if (!found) {
+    return res.status(403).send("The key doesn't exist");
+  }
+
+  // get shared_secret from previous query
+  var sharedSecret = found.shared_secret;
+
+  // Data to be signed
+  var data = [];
+  data.push(req.headers["x-route"]);
+
+  // adds they key/value when params exists
+  if (req.params) {
+    for (var key in req.params) {
+      data.push(key);
+      data.push(req.params[key]);
+    }
+  }
+
+  // adds they key/value when query string exists
+  if (req.query) {
+    for (var key in req.query) {
+      data.push(key);
+      data.push(req.query[key]);
+    }
+  }
+
+  var lexicographicalSorted = data.sort((a, b) => a.localeCompare(b));
+  var string = lexicographicalSorted.join([(separator = ";")]);
+
+  // get signature generared from the client
+  var retrievedSignature = req.headers["x-signature"];
+
+  try {
+    var computedSignature = crypto
+      .createHmac("sha256", sharedSecret)
+      .update(string)
+      .digest("hex");
+    console.log(computedSignature);
+
+    const computedSignatureBuffer = Buffer.from(computedSignature, "hex");
+    const retrievedSignatureBuffer = Buffer.from(retrievedSignature, "hex");
+
+    const valid = crypto.timingSafeEqual(
+      computedSignatureBuffer,
+      retrievedSignatureBuffer
+    );
+
+    if (valid) {
+      next();
+    } else {
+      return res.status(403).send("The signature doesnt match");
+    }
+  } catch (e) {
+    return res.status(403).send(e);
+  }
+}
+
 app.listen(3333, () => {
   console.log("Node server started on port 3333.");
 });
