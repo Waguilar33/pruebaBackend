@@ -14,6 +14,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+  res.send('Home, sweet home!')
+});
+
 app.put("/api/credential", (req, res) => {
   // search the key in the db collection
   var found = credentials.findOne({ key: req.body.key });
