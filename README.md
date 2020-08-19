@@ -10,15 +10,22 @@ involving a cryptographic hash function and a secret cryptographic key.
 ## Prerequisites
 This server is build using nodeJS. More information on how to install it in the link below.
 
-```bash
-[MIT](https://nodejs.org/en/download/)
-```
+[Download NodeJS](https://nodejs.org/en/download/)
 
 ## Installation
+
+1. Clone the repo
+
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+git clone https://github.com/Waguilar33/pruebaBackend.git
 ```
 
+2. Install all require dependencies
 ```javascript
 npm install
+```
+
+3. Launch the node server
+```javascript
+npm start
 ```
