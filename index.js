@@ -63,9 +63,9 @@ function auth(req, res, next) {
       data.push(req.query[key]);
     }
   }
-
   var lexicographicalSorted = data.sort((a, b) => a.localeCompare(b));
   var string = lexicographicalSorted.join([(separator = ";")]);
+  console.log(string);
 
   // get signature generared from the client
   var retrievedSignature = req.headers["x-signature"];
