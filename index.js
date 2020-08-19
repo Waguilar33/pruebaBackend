@@ -90,6 +90,40 @@ function auth(req, res, next) {
   }
 }
 
+app.post("/api/message", auth, (req, res) => {
+  var newRecord = messages.insert({
+    msg: req.body.msg,
+    tags: req.body.tags,
+  });
+
+  res.json(newRecord.$loki);
+});
+
+app.post("/api/message", auth, (req, res) => {
+  var newRecord = messages.insert({
+    msg: req.body.msg,
+    tags: req.body.tags,
+  });
+
+  res.json(newRecord.$loki);
+});
+
+app.get("/api/message/:id", auth, (req, res) => {
+  var result = messages.get(req.params.id);
+  if (!result) {
+    return res.status(200).send("Everything is working, we simple didn't find a message with the given id");
+  }
+  res.json(result);
+});
+
+app.get("/api/messages/:tag", auth, (req, res) => {
+  var results = messages.find({ 'tags' : { '$contains' : req.params.tag } });
+  if (!results) {
+    return res.status(200).send("Everything is working, we simple didn't find messages related to the tag given");
+  }
+  res.json(results);
+});
+
 app.listen(3333, () => {
   console.log("Node server started on port 3333.");
 });
