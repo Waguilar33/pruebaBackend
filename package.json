@@ -1,0 +1,12 @@
+{
+  "name": "prueba-backend",
+  "version": "1.0.0",
+  "description": "A simple backend for the messages api",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "author": "Williams Aguilar",
+  "license": "ISC"
+}
